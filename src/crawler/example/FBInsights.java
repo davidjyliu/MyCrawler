@@ -17,16 +17,26 @@ import com.github.abola.crawler.CrawlerPack;
  * @author Abola Lee
  *
  */
+
+
+
 public class FBInsights {
 	
 	public static void main(String[] args) {
 		
+		//FB generated code:
+		//"https://graph.facebook.com/v2.5/search?q=%E9%9D%A0%E5%8C%97&type=page&fields=id%2Cname%2Clikes%2Ctalking_about_count&access_token=CAACEdEose0cBAI1qiXoO1l7yjPeeZCToTLeavcRArGeka6YefF2hZByjomR9wfqK4l7awOL9iAAK6ZCVf3NgauiPqS55SlFMPqauTyH7DjYtb2IdqTmGnuRhBZA3RzFkwh7wjZCp2bqoZAoPeuZAaZCk1SiwR91gqQjSBybwUovHpHf4tFTLAwwHga5jQGudbnunRID2Hwj2SLVBWZCizmZA8O"
+
+		String accessToken = "CAACEdEose0cBAI1qiXoO1l7yjPeeZCToTLeavcRArGeka6YefF2hZByjomR9wfqK4l7awOL9iAAK6ZCVf3NgauiPqS55SlFMPqauTyH7DjYtb2IdqTmGnuRhBZA3RzFkwh7wjZCp2bqoZAoPeuZAaZCk1SiwR91gqQjSBybwUovHpHf4tFTLAwwHga5jQGudbnunRID2Hwj2SLVBWZCizmZA8O";
+		
 		// 遠端資料路徑
 		// >>>Fill here<<< 
 		String uri = 
-				"https://graph.facebook.com/v2.5"
-				+ "/search?"  // 補完
-				+ "&access_token=";  
+				"https://graph.facebook.com/v2.5/"
+				+ "search?q=%E9%9D%A0%E5%8C%97&"
+				+ "&type=page"
+				+ "&fields=id,name,likes,talking_about_count"  // 補完
+				+ "&access_token="+ accessToken;
 
 		// Jsoup select 後回傳的是  Elements 物件
 		Elements elems =
@@ -41,10 +51,10 @@ public class FBInsights {
 			
 			// 如何取出資料??
 			// >>>Fill here<<< 
-			String id =  data.select("").text();
-			String likes = data.select("").text();
-			String name = data.select("").text();
-			String talking_about_count = data.select("").text();
+			String id =  data.select("id").text();
+			String likes = data.select("likes").text();
+			String name = data.select("name").text();
+			String talking_about_count = data.select("talking_about_count").text();
 			
 			output += id+","+likes+",\""+name+"\","+talking_about_count+"\n";
 		}

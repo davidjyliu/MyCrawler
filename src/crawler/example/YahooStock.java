@@ -14,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import com.github.abola.crawler.CrawlerPack;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 
 /**
  * 整合練習：Yahoo Stock 個股成交明細
@@ -36,9 +38,9 @@ public class YahooStock {
 
 	static Logger log = LoggerFactory.getLogger(YahooStock.class);
 	// >>>Fill here<<< 
-	final static String mongodbServer = ""; // your host name
-	final static String mongodbDB = "";		// your db name
-	
+	final static String mongodbServer = "128.199.204.20"; // your host name
+	final static String mongodbDB = "stock";		// your db name
+
 	static String stockNumber;
 	
 	// 每次取得最後50筆交易的內容
@@ -81,8 +83,10 @@ public class YahooStock {
 				// 目標含有  成 交 明 細  的table
 				// <td align="center" width="240">2330 台積電 成 交 明 細</td>
 				// >>>Fill here<<
-				.select("") ;
+				.select("table:contains(成 交 明 細)") ;
 
+		//System.out.println(transDetail);
+		
 		// 分解明細資料表格
 		List<DBObject> parsedTransDetail = parseTransDetail(transDetail);
 		
@@ -102,15 +106,18 @@ public class YahooStock {
 		
 		// 將以下分解出資料日期中的 105/03/25
 		// <td width="180">資料日期：105/03/25</td>
-		// >>>Fill here<<< 
-		String day = "";  // day 要是 105/03/25 如何寫
+		// day 要是 105/03/25 如何get
+		String day = transDetail
+				.select("td:matchesOwn(資料日期)")
+				.text().substring(5,14);
 		
+		//System.out.println(transDetail);
 		// 取出 header 以外的所有交易資料
 		// >>>Fill here<<< 
-		for(Element detail: transDetail.select("") ){
+		for(Element detail: transDetail.select("tr[bgcolor=#ffffff]") ){
 			
 			Map<String, String> data = new HashMap<>();
-			
+
 /*			資料格式範例
   			<tr align="center" bgcolor="#ffffff" height="25">
 			 <td>09:45:46</td>
@@ -121,6 +128,15 @@ public class YahooStock {
 			 <td>1</td>
 			</tr>
 */			
+			
+//			System.out.println("=====================");
+//			System.out.println(detail.select("td:eq(0)").text());
+//			System.out.println(detail.select("td:eq(1)").text());
+//			System.out.println(detail.select("td:eq(2)").text());
+//			System.out.println(detail.select("td:eq(3)").text());
+//			System.out.println(detail.select("td:eq(5)").text());
+//			System.out.println("=====================");
+			
 			data.put("stock", stockNumber);
 			data.put("day", day);
 			
@@ -129,6 +145,8 @@ public class YahooStock {
 			data.put("sell", detail.select("td:eq(2)").text());
 			data.put("strike", detail.select("td:eq(3)").text());
 			data.put("volume", detail.select("td:eq(5)").text());
+			
+			System.out.println(data);
 			
 			result.add( new BasicDBObject(data) );
 		}
@@ -145,8 +163,16 @@ public class YahooStock {
 		MongoClient mongoClient ;
 		try {
 			
+			
+			mongoClient = new MongoClient(new ServerAddress(mongodbServer));
+			DB dbStock = mongoClient.getDB(mongodbDB);
+			dbStock.getCollection("davidjyliu").insert(parsedTransDetail);
+			
+			
 			// 如何將資料寫回 mongodb ?
-			// >>>Fill here<<< 
+			// >>>Fill here<<<
+			
+			
 			
 		} catch (Exception e) {
 			log.warn(e.getMessage());

@@ -27,7 +27,7 @@ class PttBoard {
     final static String pttIndexPage = "https://www.ptt.cc/bbs/"+board+"/index%s.html";
     
     // 取得最後幾篇的文章數量(bug?)
-    static Integer loadLastPosts = 20;
+    static Integer loadLastPosts = 5;
 
     public static void main(String[] argv){
 
@@ -35,12 +35,12 @@ class PttBoard {
     	// >>>Fill here<<< 
         String prevPage =
             CrawlerPack.start()
-                .addCookie("","")                		// 八卦版進入需要設定cookie
+                .addCookie("over18", "1")                		// 八卦版進入需要設定cookie
                 .getFromHtml(pttMainPage)            	// 遠端資料格式為 HTML
-                .select("")  							// 取得右上角『前一頁』的內容
-                .get(1).attr("href")
+                .select(".btn.wide:containsOwn(上頁)")  							// 取得右上角『前一頁』的內容
+                .attr("href")
                 .replaceAll("/bbs/"+board+"/index([0-9]+).html", "$1");
-        
+    
         
         
         // 目前最末頁 index 編號
@@ -54,9 +54,9 @@ class PttBoard {
             
             Elements links =
                 CrawlerPack.start()
-                    .addCookie("", "")		// 八卦版進入需要設定cookie >>>Fill here<<< 
+                    .addCookie("over18", "1")		// 八卦版進入需要設定cookie >>>Fill here<<< 
                     .getFromHtml(currPage)
-                    .select("");			// 取得文章的<a> tag >>>Fill here<<< 
+                    .select("a");			// 取得文章的<a> tag >>>Fill here<<< 
 
             for( Element link: links) lastPostsLink.add( link.attr("href") );
         }
@@ -84,51 +84,51 @@ class PttBoard {
     	// 取得 Jsoup 物件，稍後要做多次 select
         Document feed = 
         	CrawlerPack.start()
-		        .addCookie("","")  // 八卦版進入需要設定cookie >>>Fill here<<< 
+		        .addCookie("over18", "1")  // 八卦版進入需要設定cookie >>>Fill here<<< 
 		        .getFromHtml("https://www.ptt.cc"+url);      
         
         
         // 1. 文章作者 
         // >>>Fill here<<< 
-        String feedAuthor = feed.select("").text();
+        String feedAuthor = feed.select(".article-metaline + .article-meta-tag:containsOwn(作者) + .article.meta-value").text();
         
-        // 2. 文章標題 
-        // >>>Fill here<<< 
-        String feedTitle = feed.select("").text();
-        
-         
-        // 3. 按推總數
-        // >>>Fill here<<< 
-        Integer feedLikeCount = 
-        		countReply(feed.select(""));
-        
-        // 4. 不重複推文數
-        // >>>Fill here<<< 
-        Integer feedLikeCountNoRep = 
-        		countReplyNoRepeat(feed.select(""));
-
-        // 5. 按噓總數
-        // >>>Fill here<<< 
-        Integer feedUnLikeCount = 
-        		countReply(feed.select(""));
-        	
-        // 6. 不重複噓文數
-        // >>>Fill here<<< 
-        Integer feedUnLikeCountNoRep = 
-        		countReplyNoRepeat(feed.select(""));
-
-        // 7. 不重複噓文數
-        // >>>Fill here<<< 
-        Integer feedReplyCountNoRep = 
-        		countReplyNoRepeat(feed.select(""));
+//        // 2. 文章標題 
+//        // >>>Fill here<<< 
+//        String feedTitle = feed.select("").text();
+//        
+//         
+//        // 3. 按推總數
+//        // >>>Fill here<<< 
+//        Integer feedLikeCount = 
+//        		countReply(feed.select(""));
+//        
+//        // 4. 不重複推文數
+//        // >>>Fill here<<< 
+//        Integer feedLikeCountNoRep = 
+//        		countReplyNoRepeat(feed.select(""));
+//
+//        // 5. 按噓總數
+//        // >>>Fill here<<< 
+//        Integer feedUnLikeCount = 
+//        		countReply(feed.select(""));
+//        	
+//        // 6. 不重複噓文數
+//        // >>>Fill here<<< 
+//        Integer feedUnLikeCountNoRep = 
+//        		countReplyNoRepeat(feed.select(""));
+//
+//        // 7. 不重複噓文數
+//        // >>>Fill here<<< 
+//        Integer feedReplyCountNoRep = 
+//        		countReplyNoRepeat(feed.select(""));
       
-        String output = "\"" + feedAuthor +"\","
-        				+ "\"" + feedTitle +"\","
-        				+ feedLikeCount +","
-        				+ feedLikeCountNoRep +","
-        				+ feedUnLikeCount +","
-        				+ feedUnLikeCountNoRep +","
-        				+ feedReplyCountNoRep;
+        String output = "\"" + feedAuthor +"\",";
+//        				+ "\"" + feedTitle +"\","
+//        				+ feedLikeCount +","
+//        				+ feedLikeCountNoRep +","
+//        				+ feedUnLikeCount +","
+//        				+ feedUnLikeCountNoRep +","
+//        				+ feedReplyCountNoRep;
     	return output;
     }
     

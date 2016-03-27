@@ -19,12 +19,12 @@ public class Stock2330 {
 				+ "/ch/trading/exchange/STOCK_DAY/genpage"
 				+ "/Report201602/201602_F3_1_8_2330.php"
 				+ "?STK_NO=2330&myear=2016&mmon=03";
-		
+		System.out.println(uri );
 		System.out.println( 
 			CrawlerPack.start()
 				.setRemoteEncoding("big5")
 				.getFromHtml(uri)
-				.select("") // 如何取得證交取的數字格式 >>>Fill here<<< 
+				.select("td:matchesOwn(([0-9]{1,3},)*[0-9]{1,3}(\\.[0-9]+)*)") // 如何取得證交取的數字格式 >>>Fill here<<< 
 		);
 		
 		

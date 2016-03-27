@@ -14,7 +14,7 @@ import com.github.abola.crawler.CrawlerPack;
 public class PttHomework {
 	
 	public static void main(String[] args) {
-		String uri = "https://www.ptt.cc/bbs/Gossiping/M.1458547807.A.32A.html";
+		String uri = "https://www.ptt.cc/bbs/Gossiping/M.1459039136.A.8E7.html";
 		
 
 		System.out.println( 
