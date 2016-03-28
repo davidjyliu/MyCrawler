@@ -55,7 +55,7 @@ import com.github.abola.crawler.CrawlerPack;
 //參數6 頁數(pagenum)
 //由0開始
 
-public class GetAccupass {
+public class AccuCrawler {
 
 	public static void main(String args[]) throws IOException {
 
@@ -67,6 +67,7 @@ public class GetAccupass {
 		String strFilename = "output_" + startCat;
 		Date startTime = new Date();
 		Boolean goLoop = true;
+		//int	intElementCount = 0;
 
 		// FileInputStream fisEvent = new
 		// FileInputStream("D:/CH99_Project/"+strFilename+".txt");
@@ -74,7 +75,7 @@ public class GetAccupass {
 		// BufferedReader brEvent = new BufferedReader(isrEvent);
 
 		FileOutputStream fosEvent = new FileOutputStream(
-				"C:/Users/Student/Desktop/eventoutput/" + strFilename + "_" + startTime.getTime() + "txt", true);
+				"C:/AccupassOutput/" + strFilename + "_" + startTime.getTime() + ".txt", true);
 		OutputStreamWriter oswEvent = new OutputStreamWriter(fosEvent, "UTF-8");
 		BufferedWriter bwEvent = new BufferedWriter(oswEvent);
 		PrintWriter pwEvent = new PrintWriter(bwEvent);
@@ -84,7 +85,6 @@ public class GetAccupass {
 			System.out.println("===== Starting: " + startUrl + " ======");
 			Document docStartUrl = CrawlerPack.start().getFromHtml(startUrl);
 			Elements startElements = docStartUrl.select("div[^event]");
-			int intElementsCounts = 0;
 
 			for (Element event : startElements) {
 
@@ -129,8 +129,7 @@ public class GetAccupass {
 
 				String strCsvEvent = "{" + eventId + "},{" + eventKeywords + "},{" + eventDesc + "},{" + eventContent
 						+ "}";
-				intElementsCounts = intElementsCounts + 1;
-				System.out.println(intElementsCounts);
+				//intElementCount = intElementCount + 1;
 				pwEvent.println(strCsvEvent);
 				strCsvEvent = "";
 
@@ -143,11 +142,12 @@ public class GetAccupass {
 			lastUrl = docStartUrl.select("a:matchesOwn(>{3})").attr("href").toString();
 
 			if(lastUrl == ""){
-				System.out.println("Breaking");
+				//System.out.println("Breaking");
 				goLoop = false;
 			}else{
 				startUrl = "http://www.accupass.com/search/changeconditions" + nextUrl.substring(7);
 				System.out.println("===== Finished: " + startUrl + " ======");
+				//System.out.println("===== Crawled: " + intElementCount + " events =====");
 			}
 			
 		}
@@ -162,7 +162,6 @@ public class GetAccupass {
 		float ETC = finTime-staTime;
 		System.out.println("Elapsed time: "+ETC/1000+" seconds");
 		
-
 	}
 
 }
