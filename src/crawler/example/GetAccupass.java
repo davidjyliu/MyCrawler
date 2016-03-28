@@ -18,6 +18,43 @@ import org.jsoup.select.Elements;
 
 import com.github.abola.crawler.CrawlerPack;
 
+//************************************************************************************************************************
+//
+//目前抓取設定(時間:全部(不含已結束活動))
+//"http://www.accupass.com/search/changeconditions/r/0/" + classnum + "/0/0/1/" + pagenum + "/00010101/99991231"
+//
+//要抓歷史資料(時間:已結束)
+//"http://www.accupass.com/search/changeconditions/r/0/" + classnum + "/5/0/1/" + pagenum + "/00010101/99991231"
+//
+//新抓法 抓全部資料(由於使用自訂日期 不確定會不會被鎖定IP之類 慎用)
+//"http://www.accupass.com/search/changeconditions/r/0/" + classnum + "/6/0/1/" + pagenum + "/00010101/99990101"
+//
+//抓活動的內容(num為活動eventIdNumber)
+//"https://api.accupass.com/v3/events/" + num
+//
+//************************************************************************************************************************
+//
+///r 後面參數說明(起始時間,結束時間 要修改的話 要將時間參數設為6)
+//http://www.accupass.com/search/changeconditions/r/參數1/參數2/參數3/參數4/參數5/參數6/00010101/99991231
+//                                                  地區  分類  時間  票價  排序  頁數  起始時間 結束時間
+//參數1 地區
+//0全部 1台北 2新北 3桃園 4新竹 5苗栗 6台中 7南投 8彰化 9雲林 10嘉義 11台南 12高雄 13屏東 14宜花東 15基隆 16香港 17其他
+//
+//參數2 分類(classnum)
+//0全部 999精選 1藝文 2美食 3運動 4旅遊 5科技 6娛樂 7學習 8時尚 9公益 10攝影 11商業 12健康 13其他
+//
+//參數3 時間
+//0全部 1今天 2明天 3本周 4本周末 5已結束 6自訂日期
+//
+//參數4 票價
+//0全部 1免費 2付費
+//
+//參數5 排序
+//1時間近 2高瀏覽 3高收藏 4 最準確
+//
+//參數6 頁數(pagenum)
+//由0開始
+
 public class GetAccupass {
 
 	public static void main(String args[]) throws IOException {
