@@ -84,6 +84,7 @@ public class GetAccupass {
 			System.out.println("===== Starting: " + startUrl + " ======");
 			Document docStartUrl = CrawlerPack.start().getFromHtml(startUrl);
 			Elements startElements = docStartUrl.select("div[^event]");
+			int intElementsCounts = 0;
 
 			for (Element event : startElements) {
 
@@ -128,6 +129,8 @@ public class GetAccupass {
 
 				String strCsvEvent = "{" + eventId + "},{" + eventKeywords + "},{" + eventDesc + "},{" + eventContent
 						+ "}";
+				intElementsCounts = intElementsCounts + 1;
+				System.out.println(intElementsCounts);
 				pwEvent.println(strCsvEvent);
 				strCsvEvent = "";
 
@@ -158,6 +161,7 @@ public class GetAccupass {
 		long staTime = startTime.getTime();
 		float ETC = finTime-staTime;
 		System.out.println("Elapsed time: "+ETC/1000+" seconds");
+		
 
 	}
 
